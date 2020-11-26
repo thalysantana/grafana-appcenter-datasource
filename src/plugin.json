@@ -1,0 +1,42 @@
+{
+  "type": "datasource",
+  "name": "App Center",
+  "id": "thalysantana-appcenter-datasource",
+  "metrics": true,
+  "info": {
+    "description": "App Center data source for Grafana",
+    "author": {
+      "name": "Thalys Santana",
+      "url": "https://github.com/thalysantana"
+    },
+    "keywords": [
+      "appcenter"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [],
+    "screenshots": [
+      {
+        "name": "Config", 
+        "path": "img/screenshot-config.png"
+      },
+      {
+        "name": "Error Group Query", 
+        "path": "img/screenshot-error-groups.png"
+      },
+      {
+        "name": "Affected Users Query", 
+        "path": "img/screenshot-affected-users.png"
+      }
+    ],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": "7.2.x",
+    "grafanaVersion": "7.2.x",
+    "plugins": []
+  }
+}
