@@ -92,7 +92,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
             <SecretFormField
               isConfigured={(secureJsonFields && secureJsonFields.apiKey) as boolean}
               value={secureJsonData.apiKey || ''}
-              label="User API Key"
+              label="User API key"
               tooltip="App Center user API Token. Can me generated through https://appcenter.ms/settings"
               placeholder="App Center User API Token"
               labelWidth={10}
@@ -105,11 +105,11 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <div className="gf-form">
           <FormField
-            label="Organization Name"
+            label="Organization name"
             onChange={this.onOrgNameChange}
             value={jsonData.orgName || ''}
             tooltip="You can check the available options using the query 'listOrgs'. Spaces will be replaced by dashes"
-            placeholder="Organization Name"
+            placeholder="Organization name"
             labelWidth={10}
             inputWidth={20}
           />
@@ -117,7 +117,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
 
         <div className="gf-form">
           <FormField
-            label="App Name"
+            label="App name"
             onChange={this.onAppNameChange}
             value={jsonData.appName || ''}
             tooltip="Allows multiple apps separated by semicolon. You can check the available options using the query 'listApps'. Spaces will be replaced by dashes"

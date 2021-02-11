@@ -40,7 +40,7 @@ export class QueryEditor extends PureComponent<Props> {
         <div className="gf-form-inline">
           <div className="gf-form">
             <InlineFormLabel width={10} tooltip="Type of query you want to execute">
-              Query Type
+              Query type
             </InlineFormLabel>
             <Select
               data-testid="Query type"
@@ -53,7 +53,7 @@ export class QueryEditor extends PureComponent<Props> {
           </div>
         </div>
 
-        {['errorGroups', 'errors'].includes(type.value) && (
+        {['Error groups', 'Errors'].includes(type.value) && (
           <div className="gf-form-inline">
             <div className="gf-form">
               <FormField

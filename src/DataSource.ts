@@ -23,7 +23,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
 
-    console.log(instanceSettings);
     this.orgName = instanceSettings.jsonData.orgName;
     this.appName = instanceSettings.jsonData.appName;
     this.apiKey = instanceSettings.jsonData.key;
@@ -41,19 +40,19 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       this.timezone = options.timezone;
 
       switch (query.type.value) {
-        case 'apps':
+        case 'Apps':
           return this.listApps(query);
-        case 'errorGroups':
+        case 'Error groups':
           return this.listErrorGroups(query);
-        case 'errors':
+        case 'Errors':
           return this.listErrors(query);
-        case 'errorsCount':
+        case 'Errors count':
           return this.listErrorsCount(query);
-        case 'orgs':
+        case 'Orgs':
           return this.listOrgs(query);
       }
 
-      return null;
+      throw new Error("A 'Query type' must be selected.");
     });
 
     return Promise.all(promises).then(data => ({ data }));

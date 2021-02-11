@@ -21,7 +21,7 @@ Grafana 7.2 and later.
 
 ### What does the Data Source require to connect to the App Center?
 
-The Data Source requires a App Center User API Token in order to connect to App Center API. This token can be generated on App Center Setting page (https://appcenter.ms/settings).
+The Data Source requires a App Center User API Token (with Full Access) in order to connect to App Center API. This token can be generated on App Center Setting page (https://appcenter.ms/settings).
 
 ## Getting Started
 
@@ -39,21 +39,27 @@ grafana-cli plugins install thalysantana-appcenter-datasource
 docker run -d -p 3000:3000 --name=grafana -e "GF_INSTALL_PLUGINS=thalysantana-appcenter-datasource" grafana/grafana
 ```
 
+### Settings
+
+Configure the required properties:
+
+![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-settings.png?raw=true)
+
 ## Supported Operations
 
-#### orgs - List available organizations. (table)
+#### Orgs - List available organizations. (table)
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-orgs.png?raw=true)
 
-#### apps - List availabe apps for the configured organization. (table)
+#### Apps - List availabe apps for the configured organization. (table)
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-apps.png?raw=true)
 
-### errorGroups - List error groups for the configured apps over a range period. (table)
+### Error groups - List error groups for the configured apps over a range period. (table)
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-error-groups.png?raw=true)
 
-### errors  - List errors for the configured apps over a range period. (table)
+### Errors  - List errors for the configured apps over a range period. (table)
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-errors.png?raw=true)
 
@@ -71,7 +77,7 @@ Link creation
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-errors-link-creation-2.png?raw=true)
 
-### errorsCount - List errors count for the configured apps grouped by version. (graph)
+### Errors count - List errors count for the configured apps grouped by version. (graph)
 
 ![Query](https://github.com/thalysantana/grafana-appcenter-datasource/blob/main/src/img/screenshot-errors-count.png?raw=true)
 
