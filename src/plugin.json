@@ -19,18 +19,42 @@
     "links": [],
     "screenshots": [
       {
-        "name": "Config", 
-        "path": "img/screenshot-config.png"
+        "name": "Apps query", 
+        "path": "img/screenshot-apps.png"
       },
       {
-        "name": "Error Group Query", 
+        "name": "Error groups query", 
         "path": "img/screenshot-error-groups.png"
       },
       {
-        "name": "Affected Users Query", 
-        "path": "img/screenshot-affected-users.png"
+        "name": "Errors count query", 
+        "path": "img/screenshot-errors-count.png"
+      },
+      {
+        "name": "Errors link creation pt. 1", 
+        "path": "img/screenshot-errors-link-creation-1.png"
+      },
+      {
+        "name": "Errors link creation pt. 2", 
+        "path": "img/screenshot-errors-link-creation-2.png"
+      },
+      {
+        "name": "Errors variable creation", 
+        "path": "img/screenshot-errors-variable-creation.png"
+      },
+      {
+        "name": "Errors query", 
+        "path": "img/screenshot-errors.png"
+      },
+      {
+        "name": "Orgs query", 
+        "path": "img/screenshot-orgs.png"
+      },
+      {
+        "name": "Settings", 
+        "path": "img/screenshot-settings.png"
       }
-    ],
+   ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
