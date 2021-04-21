@@ -50,6 +50,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return this.listErrorsCount(query);
         case 'Orgs':
           return this.listOrgs(query);
+        case 'Events':
+          return this.listEvents(query);
       }
 
       throw new Error("A 'Query type' must be selected.");
@@ -71,7 +73,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function(data: any[]) {
+      .then(function (data: any[]) {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -108,7 +110,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function(data: any[]) {
+      .then(function (data: any[]) {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -166,7 +168,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           .replace('{error_group_id}', errorGroup.errorGroupId);
 
         const promise = this.doRequest(url, params).then(response => {
-          response.data.errors = response.data.errors.map(function(data: any) {
+          response.data.errors = response.data.errors.map(function (data: any) {
             data['appVersion'] = errorGroup.appVersion;
             return data;
           });
@@ -181,7 +183,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(promises)
       .then(
-        function(rootElement: any, data: any[]) {
+        function (rootElement: any, data: any[]) {
           // Step 1 - Merged all apps results into a single list
           let errors: any = [];
           for (let index = 0; index < data.length; index++) {
@@ -192,7 +194,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         }.bind(null, rootElement)
       )
       .then(
-        function(timezone: any, data: any[]) {
+        function (timezone: any, data: any[]) {
           // Step 2 - Interate over all errors and count errors by version and day
           let groupedData: any = {};
           data.forEach(error => {
@@ -206,7 +208,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return groupedData;
         }.bind(null, this.timezone)
       )
-      .then(function(data: any[]) {
+      .then(function (data: any[]) {
         // Step 3 - Add to results
         for (const key in data) {
           let version = data[key];
@@ -223,7 +225,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
         return data;
       })
-      .then(function(data: any[]) {
+      .then(function (data: any[]) {
         // Step 4 - Create frame
         const timeKey = 'time';
         versions.add(timeKey);
@@ -360,6 +362,46 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     });
   }
 
+  async listEvents(query: MyQuery) {
+    const url = `${this.baseUrl}` + `/v0.1/apps/{owner_name}/{app_name}/analytics/events`;
+    const params = {
+      start: this.start.toISOString(),
+      end: this.end.toISOString(),
+      top: query.limit,
+    };
+
+    return await this.invokeForAllApps(url, params, 'events').then(data => {
+      const frame = new MutableDataFrame({
+        refId: query.refId,
+        fields: [
+          { name: 'Id', type: FieldType.string },
+          { name: 'Name', type: FieldType.string },
+          { name: 'Device Count', type: FieldType.number },
+          { name: 'Previous Device Count', type: FieldType.number },
+          { name: 'Count', type: FieldType.number },
+          { name: 'Previous Count', type: FieldType.number },
+          { name: 'Count Per Device', type: FieldType.number },
+        ],
+      });
+
+      data.sort(this.sortBy.bind(null, ['count desc']));
+
+      data.forEach((object: any) => {
+        frame.appendRow([
+          object.id,
+          object.name,
+          object.device_count,
+          object.previous_device_count,
+          object.count,
+          object.previous_count,
+          object.count_per_device,
+        ]);
+      });
+
+      return frame;
+    });
+  }
+
   /*
     Invokes an API for all apps configured and returns an list with merged results
   */
@@ -395,7 +437,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(result)
       .then(
-        function(rootElement: any, data: any[]) {
+        function (rootElement: any, data: any[]) {
           //Merge results of all apps
           let result: any = [];
           for (let index = 0; index < data.length; index++) {
@@ -434,7 +476,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       } else {
         console.log(`Failed on last attempt`);
         console.log(url);
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           resolve({});
         });
       }

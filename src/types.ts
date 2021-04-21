@@ -5,6 +5,7 @@ export const TYPES = ['Apps', 'Error groups', 'Errors', 'Errors count', 'Orgs'];
 export interface MyQuery extends DataQuery {
   type: SelectableValue;
   limit?: number;
+  skip?: number;
 }
 
 export const defaultQuery: Partial<MyQuery> = {
