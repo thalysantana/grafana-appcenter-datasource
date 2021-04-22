@@ -73,7 +73,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function (data: any[]) {
+      .then(function(data: any[]) {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -110,7 +110,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function (data: any[]) {
+      .then(function(data: any[]) {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -168,7 +168,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           .replace('{error_group_id}', errorGroup.errorGroupId);
 
         const promise = this.doRequest(url, params).then(response => {
-          response.data.errors = response.data.errors.map(function (data: any) {
+          response.data.errors = response.data.errors.map(function(data: any) {
             data['appVersion'] = errorGroup.appVersion;
             return data;
           });
@@ -183,7 +183,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(promises)
       .then(
-        function (rootElement: any, data: any[]) {
+        function(rootElement: any, data: any[]) {
           // Step 1 - Merged all apps results into a single list
           let errors: any = [];
           for (let index = 0; index < data.length; index++) {
@@ -194,7 +194,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         }.bind(null, rootElement)
       )
       .then(
-        function (timezone: any, data: any[]) {
+        function(timezone: any, data: any[]) {
           // Step 2 - Interate over all errors and count errors by version and day
           let groupedData: any = {};
           data.forEach(error => {
@@ -208,7 +208,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return groupedData;
         }.bind(null, this.timezone)
       )
-      .then(function (data: any[]) {
+      .then(function(data: any[]) {
         // Step 3 - Add to results
         for (const key in data) {
           let version = data[key];
@@ -225,7 +225,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
         return data;
       })
-      .then(function (data: any[]) {
+      .then(function(data: any[]) {
         // Step 4 - Create frame
         const timeKey = 'time';
         versions.add(timeKey);
@@ -437,7 +437,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     return Promise.all(result)
       .then(
-        function (rootElement: any, data: any[]) {
+        function(rootElement: any, data: any[]) {
           //Merge results of all apps
           let result: any = [];
           for (let index = 0; index < data.length; index++) {
@@ -476,7 +476,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       } else {
         console.log(`Failed on last attempt`);
         console.log(url);
-        return new Promise(function (resolve, reject) {
+        return new Promise(function(resolve, reject) {
           resolve({});
         });
       }
