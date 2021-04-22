@@ -1,11 +1,10 @@
 import { DataQuery, DataSourceJsonData, SelectableValue } from '@grafana/data';
 
-export const TYPES = ['Apps', 'Error groups', 'Errors', 'Errors count', 'Orgs'];
+export const TYPES = ['Apps', 'Error groups', 'Errors', 'Errors count', 'Orgs', 'Events'];
 
 export interface MyQuery extends DataQuery {
   type: SelectableValue;
   limit?: number;
-  skip?: number;
 }
 
 export const defaultQuery: Partial<MyQuery> = {
