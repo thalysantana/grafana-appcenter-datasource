@@ -53,6 +53,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return this.listOrgs(query);
         case 'Events':
           return this.listEvents(query);
+        case 'Events properties counts':
+          return this.listEventProperties(query);
+        case 'Events property counts':
+          return this.listEventPropertyCounts(query);
       }
 
       throw new Error("A 'Query type' must be selected.");
@@ -422,7 +426,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     });
   }
 
-  async listEventPropertCounts(query: MyQuery) {
+  async listEventPropertyCounts(query: MyQuery) {
     const eventName = this.getVariable('eventName');
     const eventPropertyName = this.getVariable('eventPropertyName');
     const url =
