@@ -415,11 +415,19 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return await this.invokeForAllApps(url, params, 'event_properties').then(data => {
       const frame = new MutableDataFrame({
         refId: query.refId,
-        fields: [],
+        fields: [
+          { name: 'Id', type: FieldType.string },
+          { name: 'Name', type: FieldType.string },
+        ],
       });
 
       if (data) {
-        frame.appendRow(data);
+        data.forEach((object: string) => {
+          frame.appendRow({
+            object,
+            object
+          });
+        });
       }
 
       return frame;
@@ -428,7 +436,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
   async listEventPropertyCounts(query: MyQuery) {
     const eventName = this.getVariable('eventName');
-    const eventPropertyName = this.getVariable('eventPropertyName');
+    //const eventPropertyName = this.getVariable('eventPropertyName');
+    // get all properties for the given event
+    // loop through all properties and get counts and combine into array
+    // win
     const url =
       `${this.baseUrl}` +
       `/v0.1/apps/{owner_name}/{app_name}/analytics/events/${eventName}/properties/${eventPropertyName}/counts`;
