@@ -53,9 +53,9 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return this.listOrgs(query);
         case 'Events':
           return this.listEvents(query);
-        case 'Events properties counts':
+        case 'Event properties':
           return this.listEventProperties(query);
-        case 'Events property counts':
+        case 'Event property count':
           return this.listEventPropertyCounts(query);
       }
 

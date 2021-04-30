@@ -1,6 +1,6 @@
 import { DataQuery, DataSourceJsonData, SelectableValue } from '@grafana/data';
 
-export const TYPES = ['Apps', 'Error groups', 'Errors', 'Errors count', 'Orgs', 'Events'];
+export const TYPES = ['Apps', 'Error groups', 'Errors', 'Errors count', 'Orgs', 'Events', 'Event properties', 'Event property count'];
 
 export interface MyQuery extends DataQuery {
   type: SelectableValue;
