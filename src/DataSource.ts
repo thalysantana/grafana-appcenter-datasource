@@ -423,9 +423,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       if (data) {
         data.forEach((object: any[], index: number) => {
-          frame.appendRow([
-            index, object
-          ]);
+          frame.appendRow([index, object]);
         });
       }
 
