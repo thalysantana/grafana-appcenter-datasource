@@ -416,14 +416,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       const frame = new MutableDataFrame({
         refId: query.refId,
         fields: [
-          { name: 'Id', type: FieldType.number },
+          { name: 'Id', type: FieldType.string },
           { name: 'Name', type: FieldType.string },
         ],
       });
 
       if (data) {
-        data.forEach((object: any[], index: number) => {
-          frame.appendRow([index, object]);
+        data.forEach((object: any[]) => {
+          frame.appendRow([eventName, object]);
         });
       }
 
