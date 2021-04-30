@@ -415,9 +415,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return await this.invokeForAllApps(url, params, 'event_properties').then(data => {
       const frame = new MutableDataFrame({
         refId: query.refId,
-        fields: [
-          { name: 'Name', type: FieldType.string },
-        ],
+        fields: [{ name: 'Name', type: FieldType.string }],
       });
 
       if (data) {
