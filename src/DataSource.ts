@@ -10,7 +10,6 @@ import {
 } from '@grafana/data';
 
 import { MyQuery, MyDataSourceOptions } from './types';
-import { dataSnapshotLoad } from '@grafana/data/types/panelEvents';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   orgName: string;
