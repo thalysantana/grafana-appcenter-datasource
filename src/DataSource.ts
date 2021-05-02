@@ -442,8 +442,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         fields: [
           { name: 'Event Name', type: FieldType.string },
           { name: 'Name', type: FieldType.string },
-          { name: 'Count', type: FieldType.string },
-          { name: 'Previous Count', type: FieldType.string },
+          { name: 'Count', type: FieldType.number },
+          { name: 'Previous Count', type: FieldType.number },
         ],
       });
 
