@@ -19,7 +19,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   start: Date;
   end: Date;
   timezone: string;
-  eventName: any;
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
