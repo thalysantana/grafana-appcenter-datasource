@@ -488,10 +488,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       const promise = this.doRequest(url, requestParameters).then(response => {
         //Set app name to data
-        if (typeof response.data[rootElement] === 'object') {
-          response.data[rootElement].map((element: any) => (element['appName'] = appName));
-        }
-
+        response.data[rootElement].map((element: any) => {
+          if (typeof element === 'object') {
+            element['appName'] = appName;
+          }
+        });
         return response.data;
       });
 
