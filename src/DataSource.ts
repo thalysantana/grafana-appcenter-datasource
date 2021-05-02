@@ -416,16 +416,16 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         refId: query.refId,
         fields: [{ name: 'Name', type: FieldType.string }],
       });
-      console.log(data)
+      console.log(data);
       if (data) {
         data.forEach((object: any, index: any) => {
-          console.log(object)
+          console.log(object);
           let val = { id: index, value: object };
-          console.log(val)
+          console.log(val);
           frame.appendRow([val.value]);
         });
       }
-      console.log(frame)
+      console.log(frame);
       return frame;
     });
   }
