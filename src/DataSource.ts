@@ -419,7 +419,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       if (data) {
         data.forEach((object: any, index: any) => {
-          let val = {id: index, value: object};
+          let val = { id: index, value: object };
           frame.appendRow([val.value]);
         });
       }
