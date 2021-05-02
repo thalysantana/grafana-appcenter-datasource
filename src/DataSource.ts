@@ -475,26 +475,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
       if (data) {
-        data.reduce(
-          (
-            accumulator: any[],
-            value: {
-              name: any;
-              count: any;
-              previous_count: any;
-            }
+        data.reduce((accumulator: any[], value: { name: any; count: any; previous_count: any }
           ) => {
-            let name = value.name,
-              found = accumulator.find(elem => elem.name === name);
-            if (found) {
-              found.count += value.count;
-              found.previous_count += value.previous_count;
-            } else {
-              accumulator.push(value);
-            }
-            return accumulator;
-          },
-          []
+          let name = value.name,
+            found = accumulator.find(elem => elem.name === name);
+          if (found) {
+            found.count += value.count;
+            found.previous_count += value.previous_count;
+          } else {
+            accumulator.push(value);
+          }
+          return accumulator;
+          }, []
         );
 
         data.sort(this.sortBy.bind(null, ['name desc']));
