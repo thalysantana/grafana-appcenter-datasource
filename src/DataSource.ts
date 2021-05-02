@@ -464,8 +464,21 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           { name: 'Previous Count', type: FieldType.number },
         ],
       });
-
+      
       if (data) {
+        const reducer = (accumulator, value) => {
+          let name = value.name,
+            found = accumulator.find((elem) => elem.name == name);
+          if (found) {
+            found.count += value.count;
+            found.previous_count += value.previous_count;
+          } else {
+            accumulator.push(value);
+          }
+          return accumulator;
+        };
+        data.reduce(reducer, []);
+        
         data.sort(this.sortBy.bind(null, ['name desc']));
 
         data.forEach((object: any) => {
