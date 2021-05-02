@@ -389,7 +389,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
 
-      const reducer = (
+      data.reduce((
         accumulator: any[],
         value: {
           name: any;
@@ -412,9 +412,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           accumulator.push(value);
         }
         return accumulator;
-      };
-
-      data.reduce(reducer, []);
+      }, []);
 
       data.sort(this.sortBy.bind(null, ['count desc']));
 
@@ -474,7 +472,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
       if (data) {
-        const reducer = (
+        data.reduce((
           accumulator: any[],
           value: {
             name: any;
@@ -491,8 +489,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
             accumulator.push(value);
           }
           return accumulator;
-        };
-        data.reduce(reducer, []);
+        }, []);
 
         data.sort(this.sortBy.bind(null, ['name desc']));
 
