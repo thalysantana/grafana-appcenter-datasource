@@ -390,9 +390,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
 
-      const reducer = (accumulator: any[], value: { name: any; device_count: any; previous_device_count: any; count: any; previous_count: any; count_per_device: any; }) => {
+      const reducer = (
+        accumulator: any[],
+        value: { 
+          name: any;
+          device_count: any;
+          previous_device_count: any;
+          count: any;
+          previous_count: any;
+          count_per_device: any;
+        }) => {
         let name = value.name,
-          found = accumulator.find((elem) => elem.name == name);
+          found = accumulator.find(elem => elem.name === name);
         if (found) {
           found.device_count += value.device_count;
           found.previous_device_count += value.previous_device_count;
@@ -466,9 +475,15 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       });
       
       if (data) {
-        const reducer = (accumulator, value) => {
+        const reducer = (
+          accumulator: any[],
+          value: { 
+            name: any;
+            count: any;
+            previous_count: any;
+          }) => {
           let name = value.name,
-            found = accumulator.find((elem) => elem.name == name);
+            found = accumulator.find(elem => elem.name === name);
           if (found) {
             found.count += value.count;
             found.previous_count += value.previous_count;
@@ -478,7 +493,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return accumulator;
         };
         data.reduce(reducer, []);
-        
+
         data.sort(this.sortBy.bind(null, ['name desc']));
 
         data.forEach((object: any) => {
