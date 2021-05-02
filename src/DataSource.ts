@@ -392,14 +392,15 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       const reducer = (
         accumulator: any[],
-        value: { 
+        value: {
           name: any;
           device_count: any;
           previous_device_count: any;
           count: any;
           previous_count: any;
           count_per_device: any;
-        }) => {
+        }
+      ) => {
         let name = value.name,
           found = accumulator.find(elem => elem.name === name);
         if (found) {
@@ -481,7 +482,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
             name: any;
             count: any;
             previous_count: any;
-          }) => {
+          }
+        ) => {
           let name = value.name,
             found = accumulator.find(elem => elem.name === name);
           if (found) {
