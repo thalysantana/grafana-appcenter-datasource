@@ -389,34 +389,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
 
-      data.reduce(
-        (
-          accumulator: any[],
-          value: {
-            name: any;
-            device_count: any;
-            previous_device_count: any;
-            count: any;
-            previous_count: any;
-            count_per_device: any;
-          }
-        ) => {
-          let name = value.name,
-            found = accumulator.find(elem => elem.name === name);
-          if (found) {
-            found.device_count += value.device_count;
-            found.previous_device_count += value.previous_device_count;
-            found.count += value.count;
-            found.previous_count += value.previous_count;
-            found.count_per_device += value.count_per_device;
-          } else {
-            accumulator.push(value);
-          }
-          return accumulator;
-        },
-        []
-      );
-
       data.sort(this.sortBy.bind(null, ['count desc']));
 
       data.forEach((object: any) => {
@@ -474,19 +446,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           { name: 'Previous Count', type: FieldType.number },
         ],
       });
-      if (data) {
-        data.reduce((accumulator: any[], value: { name: any; count: any; previous_count: any }) => {
-          let name = value.name,
-            found = accumulator.find(elem => elem.name === name);
-          if (found) {
-            found.count += value.count;
-            found.previous_count += value.previous_count;
-          } else {
-            accumulator.push(value);
-          }
-          return accumulator;
-        }, []);
 
+      if (data) {
         data.sort(this.sortBy.bind(null, ['name desc']));
 
         data.forEach((object: any) => {
