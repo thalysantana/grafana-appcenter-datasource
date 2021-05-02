@@ -416,16 +416,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         refId: query.refId,
         fields: [{ name: 'Name', type: FieldType.string }],
       });
-      console.log(data);
       if (data) {
-        data.forEach((object: any, index: any) => {
-          console.log(object);
-          let val = { id: index, value: object };
-          console.log(val);
-          frame.appendRow([val.value]);
+        data.forEach((object: any) => {
+          frame.appendRow([object]);
         });
       }
-      console.log(frame);
       return frame;
     });
   }
@@ -489,6 +484,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       const promise = this.doRequest(url, requestParameters).then(response => {
         //Set app name to data
         response.data[rootElement].map((element: any) => {
+          console.log(element);
           if (typeof element === 'object') {
             element['appName'] = appName;
           }
