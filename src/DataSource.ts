@@ -474,11 +474,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           { name: 'Previous Count', type: FieldType.number },
         ],
       });
-      
       if (data) {
         const reducer = (
           accumulator: any[],
-          value: { 
+          value: {
             name: any;
             count: any;
             previous_count: any;
