@@ -408,7 +408,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   }
 
   async listEventProperties(query: MyQuery) {
-    const eventName = this.getVariable('eventGroupName');
+    const eventName = this.getVariable('eventName');
     const url = `${this.baseUrl}` + `/v0.1/apps/{owner_name}/{app_name}/analytics/events/${eventName}/properties`;
     const params = {};
 
