@@ -50,6 +50,12 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return this.listErrorsCount(query);
         case 'Orgs':
           return this.listOrgs(query);
+        case 'Events':
+          return this.listEvents(query);
+        case 'Event properties':
+          return this.listEventProperties(query);
+        case 'Event property count':
+          return this.listEventPropertyCounts(query);
       }
 
       throw new Error("A 'Query type' must be selected.");
@@ -71,7 +77,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function(data: any[]) {
+      .then((data: any[]) => {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -108,7 +114,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     result.push(promise);
 
     return Promise.all(result)
-      .then(function(data: any[]) {
+      .then((data: any[]) => {
         const frame = new MutableDataFrame({
           refId: query.refId,
           fields: [
@@ -166,7 +172,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           .replace('{error_group_id}', errorGroup.errorGroupId);
 
         const promise = this.doRequest(url, params).then(response => {
-          response.data.errors = response.data.errors.map(function(data: any) {
+          response.data.errors = response.data.errors.map((data: any) => {
             data['appVersion'] = errorGroup.appVersion;
             return data;
           });
@@ -360,6 +366,98 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     });
   }
 
+  async listEvents(query: MyQuery) {
+    const url = `${this.baseUrl}` + `/v0.1/apps/{owner_name}/{app_name}/analytics/events`;
+    const params = {
+      start: this.start.toISOString(),
+      end: this.end.toISOString(),
+      top: query.limit,
+    };
+
+    return await this.invokeForAllApps(url, params, 'events').then(data => {
+      const frame = new MutableDataFrame({
+        refId: query.refId,
+        fields: [
+          { name: 'Id', type: FieldType.string },
+          { name: 'Name', type: FieldType.string },
+          { name: 'Device Count', type: FieldType.number },
+          { name: 'Previous Device Count', type: FieldType.number },
+          { name: 'Count', type: FieldType.number },
+          { name: 'Previous Count', type: FieldType.number },
+          { name: 'Count Per Device', type: FieldType.number },
+        ],
+      });
+
+      data.sort(this.sortBy.bind(null, ['count desc']));
+
+      data.forEach((object: any) => {
+        frame.appendRow([
+          object.id,
+          object.name,
+          object.device_count,
+          object.previous_device_count,
+          object.count,
+          object.previous_count,
+          object.count_per_device,
+        ]);
+      });
+
+      return frame;
+    });
+  }
+
+  async listEventProperties(query: MyQuery) {
+    const eventName = this.getVariable('eventName');
+    const url = `${this.baseUrl}` + `/v0.1/apps/{owner_name}/{app_name}/analytics/events/${eventName}/properties`;
+
+    return await this.invokeForAllApps(url, {}, 'event_properties').then(data => {
+      const frame = new MutableDataFrame({
+        refId: query.refId,
+        fields: [{ name: 'Name', type: FieldType.string }],
+      });
+      if (data) {
+        data.forEach((object: any) => {
+          frame.appendRow([object]);
+        });
+      }
+      return frame;
+    });
+  }
+
+  async listEventPropertyCounts(query: MyQuery) {
+    const eventName = this.getVariable('eventName');
+    const eventPropertyName = this.getVariable('eventPropertyName');
+    const url =
+      `${this.baseUrl}` +
+      `/v0.1/apps/{owner_name}/{app_name}/analytics/events/${eventName}/properties/${eventPropertyName}/counts`;
+    const params = {
+      start: this.start.toISOString(),
+      end: this.end.toISOString(),
+    };
+
+    return await this.invokeForAllApps(url, params, 'values').then(data => {
+      const frame = new MutableDataFrame({
+        refId: query.refId,
+        fields: [
+          { name: 'Event Name', type: FieldType.string },
+          { name: 'Name', type: FieldType.string },
+          { name: 'Count', type: FieldType.number },
+          { name: 'Previous Count', type: FieldType.number },
+        ],
+      });
+
+      if (data) {
+        data.sort(this.sortBy.bind(null, ['name desc']));
+
+        data.forEach((object: any) => {
+          frame.appendRow([eventName, object.name, object.count, object.previous_count]);
+        });
+      }
+
+      return frame;
+    });
+  }
+
   /*
     Invokes an API for all apps configured and returns an list with merged results
   */
@@ -384,8 +482,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       const promise = this.doRequest(url, requestParameters).then(response => {
         //Set app name to data
-        response.data[rootElement].map((element: any) => (element['appName'] = appName));
-
+        response.data[rootElement].map((element: any) => {
+          if (typeof element === 'object') {
+            element['appName'] = appName;
+          }
+        });
         return response.data;
       });
 
