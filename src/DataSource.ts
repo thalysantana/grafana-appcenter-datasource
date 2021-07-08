@@ -388,20 +388,22 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
 
-      data.sort(this.sortBy.bind(null, ['count desc']));
+      if(data) {
+        data.sort(this.sortBy.bind(null, ['count desc']));
 
-      data.forEach((object: any) => {
-        frame.appendRow([
-          object.id,
-          object.name,
-          object.device_count,
-          object.previous_device_count,
-          object.count,
-          object.previous_count,
-          object.count_per_device,
-        ]);
-      });
-
+        data.forEach((object: any) => {
+          frame.appendRow([
+            object.id,
+            object.name,
+            object.device_count,
+            object.previous_device_count,
+            object.count,
+            object.previous_count,
+            object.count_per_device,
+          ]);
+        });
+      }
+      
       return frame;
     });
   }
