@@ -388,7 +388,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         ],
       });
 
-      if(data) {
+      if (data) {
         data.sort(this.sortBy.bind(null, ['count desc']));
 
         data.forEach((object: any) => {
@@ -403,7 +403,6 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           ]);
         });
       }
-      
       return frame;
     });
   }
