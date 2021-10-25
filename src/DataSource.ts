@@ -1,5 +1,4 @@
 import { getBackendSrv, getTemplateSrv } from '@grafana/runtime';
-
 import {
   DataQueryRequest,
   DataQueryResponse,
@@ -8,6 +7,8 @@ import {
   MutableDataFrame,
   FieldType,
 } from '@grafana/data';
+
+import { RateLimiter } from 'limiter';
 
 import { MyQuery, MyDataSourceOptions } from './types';
 
@@ -19,6 +20,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   start: Date;
   end: Date;
   timezone: string;
+  // Rate-limiter used to limit request rate to AppCenter API to avoid HTTP status 429 ("too many requests")
+  rateLimiter?: RateLimiter;
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
@@ -30,6 +33,12 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     this.start = new Date();
     this.end = new Date();
     this.timezone = 'browser';
+    if (!!instanceSettings.jsonData.rateLimit && instanceSettings.jsonData.rateLimit > 0) {
+      this.rateLimiter = new RateLimiter({
+        tokensPerInterval: instanceSettings.jsonData.rateLimit,
+        interval: 'second',
+      });
+    }
   }
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
@@ -515,6 +524,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   */
   async doRequest(url: string, queryParams: any, retry = 3): Promise<any> {
     try {
+      // Ask and wait if necessary until we are allowed to send next request
+      if (!!this.rateLimiter) {
+        const reqLeft = await this.rateLimiter.removeTokens(1);
+        console.log(`Request rate limit left ${reqLeft}`);
+      }
       const result = await getBackendSrv().datasourceRequest({
         method: 'GET',
         url: url,

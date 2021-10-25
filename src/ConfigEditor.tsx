@@ -68,6 +68,15 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
+  onReqRateLimitChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    const jsonData = {
+      ...options.jsonData,
+      rateLimit: parseFloat(event.target.value),
+    };
+    onOptionsChange({ ...options, jsonData });
+  };
+
   render() {
     const { options } = this.props;
     const { jsonData, secureJsonFields } = options;
@@ -122,6 +131,17 @@ export class ConfigEditor extends PureComponent<Props, State> {
             value={jsonData.appName || ''}
             tooltip="Allows multiple apps separated by semicolon. You can check the available options using the query 'listApps'. Spaces will be replaced by dashes"
             placeholder="app1;myAndroidAPP;someIosApp"
+            labelWidth={10}
+            inputWidth={20}
+          />
+        </div>
+
+        <div className="gf-form">
+          <FormField
+            label="Request rate limit"
+            onChange={this.onReqRateLimitChange}
+            value={jsonData.rateLimit || '0'}
+            tooltip="Optional limit for the number of requests per second sent to AppCenter API. Can be used to avoid 429 ('Too many requests') errors. A value of 0 disables rate limitation"
             labelWidth={10}
             inputWidth={20}
           />

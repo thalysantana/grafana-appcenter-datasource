@@ -29,6 +29,10 @@ export interface MyDataSourceOptions extends DataSourceJsonData {
   orgName: string;
   appName: string;
   key: string;
+  /**
+   * Number of requests per second
+   */
+  rateLimit?: number;
 }
 
 /**
