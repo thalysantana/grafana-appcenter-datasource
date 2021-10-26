@@ -5,6 +5,8 @@ export const TYPES = [
   'Error groups',
   'Errors',
   'Errors count',
+  'Errors per day',
+  'Crashes per day',
   'Orgs',
   'Events',
   'Event properties',
@@ -37,3 +39,8 @@ export interface MyDataSourceOptions extends DataSourceJsonData {
 export interface MySecureJsonData {
   apiKey?: string;
 }
+
+/**
+ * Error types supported by AppCenter API (unhandledError meaning crashes).
+ */
+export type ErrorType = 'all' | 'unhandledError' | 'handledError';

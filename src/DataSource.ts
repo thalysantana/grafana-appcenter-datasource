@@ -7,9 +7,10 @@ import {
   DataSourceInstanceSettings,
   MutableDataFrame,
   FieldType,
+  FieldColorMode,
 } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions } from './types';
+import { MyQuery, MyDataSourceOptions, ErrorType } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   orgName: string;
@@ -48,6 +49,10 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
           return this.listErrors(query);
         case 'Errors count':
           return this.listErrorsCount(query);
+        case 'Errors per day':
+          return this.listErrorCountPerDay(query, 'handledError');
+        case 'Crashes per day':
+          return this.listErrorCountPerDay(query, 'unhandledError');
         case 'Orgs':
           return this.listOrgs(query);
         case 'Events':
@@ -452,6 +457,51 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
         data.forEach((object: any) => {
           frame.appendRow([eventName, object.name, object.count, object.previous_count]);
+        });
+      }
+
+      return frame;
+    });
+  }
+
+  async listErrorCountPerDay(query: MyQuery, errorType: ErrorType) {
+    const url = `${this.baseUrl}` + `/v0.1/apps/{owner_name}/{app_name}/errors/errorCountsPerDay`;
+    const params = {
+      start: this.start.toISOString(),
+      end: this.end.toISOString(),
+      errorType: errorType,
+    };
+
+    return await this.invokeForAllApps(url, params, 'errors').then((data) => {
+      const frame = new MutableDataFrame({
+        refId: query.refId,
+        fields: [
+          { name: 'Date', type: FieldType.time },
+          { name: 'App', type: FieldType.string },
+          {
+            name: errorType === 'handledError' ? 'Error Count' : 'Crash Count',
+            type: FieldType.number,
+            config: {
+              // Define default color for error/crash count series
+              color: {
+                // Access to FieldColorMode.Fixed yields undefined error since TS enum is not included in generated JS
+                mode: 'fixed' as FieldColorMode,
+                fixedColor: errorType === 'handledError' ? 'orange' : 'red',
+              },
+            },
+          },
+        ],
+        meta: {
+          preferredVisualisationType: 'graph',
+        },
+      });
+
+      if (data) {
+        data.sort(this.sortBy.bind(null, ['datetime']));
+
+        data.forEach((object: any) => {
+          const occurrencyDay = new Date(object.datetime).getTime();
+          frame.appendRow([occurrencyDay, object.appName, object.count]);
         });
       }
 
